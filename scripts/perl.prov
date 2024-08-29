@@ -163,6 +163,12 @@ sub process_file {
       next;
     }
 
+    # skip lines containing NO_RPM_PERL_PROVIDES to allow preventing wrong detection
+    # with a comment
+    if (m/NO_RPM_PERL_PROVIDES/) {
+      next;
+    }
+
     # not everyone puts the package name of the file as the first
     # package name so we report all namespaces except some common
     # false positives as if they were provided packages (really ugly).
