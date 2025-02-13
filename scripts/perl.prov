@@ -86,7 +86,7 @@ foreach $module (sort keys %require) {
     # $RPM_* variable when I upgrade.
 
     my $normv = version->parse($require{$module})->normal;
-    $v =~ s/^v//;
+    $normv =~ s/^v//;
     if($normalversion)
     {
       print "perl($module) = $normv\n";
