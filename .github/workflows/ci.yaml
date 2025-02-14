@@ -8,12 +8,58 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        perl-version:
+        - '5.8-buster'
+        - '5.10-buster'
+        - '5.12-buster'
+        - '5.14-buster'
+        - '5.16-buster'
+        - '5.18-buster'
+        - '5.20-buster'
+        - '5.22-buster'
+        - '5.24-buster'
+        - '5.26-buster'
+        - '5.28-buster'
+        - '5.30-bullseye'
+        - '5.32-bullseye'
+        - '5.34-bullseye'
+        - '5.36-bookworm'
+        - '5.38-bookworm'
+        - '5.40-bookworm'
+        - 'latest'
+
+    container:
+      image: perl:${{ matrix.perl-version }}
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Run tests
+      run: |
+        cpanm -n Test::More
+        perl -c scripts/perl.req
+        make testv
+
+
+  coverage:
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
-    - name: Check
+    - name: Dependencies
       run: |
-        perl -c scripts/perl.prov
+        sudo apt-get install -y libdevel-cover-perl
+    - name: Check Coverage
+      run: |
         perl -c scripts/perl.req
+        make cover
+        rc=0
+        cover | grep ^Total | grep '100.0$' || rc=1
+        if [[ $rc -ne 0 ]]; then
+            echo "Coverage should be 100%"
+            exit 1
+        fi
