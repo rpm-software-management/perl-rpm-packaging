@@ -245,7 +245,7 @@ sub process_file {
 	  die "Unclosed HEREDOC [$inheredoc] in file: '$file'\n";
   }
 
-  close(FILE) ||
+  close(FILE) ||  # uncoverable branch true
     die("$0: Could not close file: '$file' : $!\n");
 
   return;
