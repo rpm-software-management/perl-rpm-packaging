@@ -78,7 +78,7 @@ if ("@ARGV") {
 foreach $module (sort keys %require) {
   if (length($require{$module}) == 0) {
     print "perl($module)\n";
-    print "perln($module)\n" if !$perln;
+    print "perln($module)\n" if $perln;
   } else {
 
     # I am not using rpm3.0 so I do not want spaces around my
