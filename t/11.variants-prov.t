@@ -4,11 +4,6 @@ use warnings;
 use Test::More;
 use FindBin '$Bin';
 
-# TODO only execute version->parse if flag is used
-if ($] < 5.010) { # uncoverable branch true
-    plan skip_all => 'Perl < v5.8 does not have version.pm'; # uncoverable statement
-}
-
 my $prov = "$Bin/../scripts/perl.prov";
 my $data = "$Bin/data/prov";
 
