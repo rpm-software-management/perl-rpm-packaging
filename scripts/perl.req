@@ -84,22 +84,29 @@ foreach $module (sort keys %require) {
     # operators. Also I will need to change the processing of the
     # $RPM_* variable when I upgrade.
 
-    my $normv = version->parse($require{$module})->normal;
-    $normv =~ s/^v//;
-    if($normalversion)
-    {
+    if ($normalversion) {
+      my $normv = normalversion($require{$module});
       print "perl($module) = $normv\n";
     }
     else
     {
       print "perl($module) = $require{$module}\n";
     }
-    print "perln($module) = $normv\n" if $perln;
+    if ($perln) {
+      my $normv = normalversion($require{$module});
+      print "perln($module) = $normv\n";
+    }
   }
 }
 
 exit 0;
 
+sub normalversion {
+    my ($version) = @_;
+    my $normalized = version->parse($version)->normal;
+    $normalized =~ s/^v//;
+    return $normalized;
+}
 
 
 sub add_require {

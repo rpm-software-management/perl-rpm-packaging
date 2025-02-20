@@ -4,11 +4,6 @@ use warnings;
 use Test::More;
 use FindBin '$Bin';
 
-# TODO only execute version->parse if flag is used
-if ($] < 5.010) { # uncoverable branch true
-    plan skip_all => 'Perl < v5.8 does not have version.pm'; # uncoverable statement
-}
-
 my $req = "$Bin/../scripts/perl.req";
 my $data = "$Bin/data/req";
 
@@ -16,10 +11,14 @@ subtest basic => sub {
     my $exp = <<'EOM';
 perl(Example) = 3.15
 EOM
+    if ($] < 5.010) { # uncoverable branch true
+        # perl 5.18 does not have version.pm
+        $exp = <<'EOM'; # uncoverable statement
+perl(Example) = 3.14
+EOM
+    }
 
-    my $out = qx{find $data/basic -type f};
-    diag $out;
-    $out = qx{find $data/basic -type f | $^X $req};
+    my $out = qx{find $data/basic -type f | $^X $req};
     is $out, $exp, 'perl.req (STDIN) output as expected';
 
     chomp(my @files = qx{find $data/basic -type f});

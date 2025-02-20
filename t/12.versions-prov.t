@@ -4,10 +4,6 @@ use warnings;
 use Test::More;
 use FindBin '$Bin';
 
-# TODO only execute version->parse if flag is used
-if ($] < 5.010) { # uncoverable branch true
-    plan skip_all => 'Perl < v5.8 does not have version.pm'; # uncoverable statement
-}
 
 my $prov = "$Bin/../scripts/perl.prov";
 my $data = "$Bin/data/prov";
@@ -49,6 +45,9 @@ subtest various => sub {
 };
 
 subtest normalize => sub {
+    if ($] < 5.010) { # uncoverable branch true
+        plan skip_all => 'Perl v5.8 does not have version.pm'; # uncoverable statement
+    }
     my $out = qx{$^X $prov --normalversion $file1};
     is $out, $exp_normal, 'perl.prov --normalversion as expected';
 
@@ -77,7 +76,7 @@ EOM
     is $out, $exp, 'perl.prov decimal versions as expected';
 
     subtest 'underscore normalize' => sub {
-        if ($^V < v5.24) { # uncoverable branch true
+        if ($] < 5.024) { # uncoverable branch true
             plan skip_all => 'Perl < v5.24 normalizes versions with underscores differently'; # uncoverable statement
         }
         $out = qx{$^X $prov --normalversion $file2};
