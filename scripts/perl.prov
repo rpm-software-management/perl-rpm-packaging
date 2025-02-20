@@ -48,7 +48,7 @@ use strict;
 
 my $normalversion = 0;
 my $perln = 0;
-my %require;
+my %provides;
 
 while ("@ARGV") {
   if ($ARGV[0] =~ /^--/) {
@@ -77,8 +77,8 @@ if ("@ARGV") {
 }
 
 
-foreach my $module (sort keys %require) {
-  if (length($require{$module}) == 0) {
+foreach my $module (sort keys %provides) {
+  if (length($provides{$module}) == 0) {
     print "perl($module)\n";
     print "perln($module)\n" if $perln;
   } else {
@@ -88,14 +88,14 @@ foreach my $module (sort keys %require) {
     # $RPM_* variable when I upgrade.
 
     if ($normalversion) {
-      my $normv = normalversion($require{$module});
+      my $normv = normalversion($provides{$module});
       print "perl($module) = $normv\n";
     }
     else {
-      print "perl($module) = $require{$module}\n";
+      print "perl($module) = $provides{$module}\n";
     }
     if ($perln) {
-      my $normv = normalversion($require{$module});
+      my $normv = normalversion($provides{$module});
       print "perln($module) = $normv\n";
     }
   }
@@ -187,11 +187,11 @@ sub process_file {
       if ($package eq 'main') {
         undef $package;
       } else {
-        # If $package already exists in the $require hash, it means
+        # If $package already exists in the %provides hash, it means
         # the package definition is broken up over multiple blocks.
         # In that case, don't stomp a previous $VERSION we might have
         # found.  (See BZ#214496.)
-        $require{$package} = $version unless (exists $require{$package});
+        $provides{$package} = $version unless (exists $provides{$package});
       }
     }
 
@@ -224,7 +224,7 @@ sub process_file {
 
         $version = $1;
       }
-      $require{$package} = $version;
+      $provides{$package} = $version;
     }
 
     # Allow someone to have a variable that defines virtual packages
