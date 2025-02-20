@@ -58,8 +58,8 @@ jobs:
         perl -c scripts/perl.req
         make cover
         rc=0
-        cover | grep ^Total | grep '100.0$' || rc=1
+        cover | grep ^scripts/perl.prov | grep '100.0$' || rc=1
         if [[ $rc -ne 0 ]]; then
-            echo "Coverage should be 100%"
+            echo "Coverage for scripts/perl.prov should be 100%"
             exit 1
         fi

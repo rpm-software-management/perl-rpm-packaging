@@ -10,7 +10,7 @@ if ($] < 5.010) { # uncoverable branch true
 }
 
 my $prov = "$Bin/../scripts/perl.prov";
-my $data = "$Bin/data";
+my $data = "$Bin/data/prov";
 
 subtest basic => sub {
     my $exp = <<'EOM';
