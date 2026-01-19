@@ -86,15 +86,15 @@ foreach $module (sort keys %require) {
 
     if ($normalversion) {
       my $normv = normalversion($require{$module});
-      print "perl($module) = $normv\n";
+      print "perl($module) >= $normv\n";
     }
     else
     {
-      print "perl($module) = $require{$module}\n";
+      print "perl($module) >= $require{$module}\n";
     }
     if ($perln) {
       my $normv = normalversion($require{$module});
-      print "perln($module) = $normv\n";
+      print "perln($module) >= $normv\n";
     }
   }
 }
